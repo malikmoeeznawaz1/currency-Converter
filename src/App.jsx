@@ -3,8 +3,10 @@ import React, { useState } from 'react'
 const App = () => {
 
   const[amount, setAmount] = useState(0);
-  const[fromCurrency, setCurrency] = useState("USD");
+  const[fromCurrency, setFromCurrency] = useState("USD");
   const[toCurrency, setToCurrency] = useState("PKR");
+
+  const handleCurrencyConverter = () => {};
 
   return <section>
     <div className="currency-converter">
@@ -20,7 +22,7 @@ const App = () => {
         <section className="currency-selector">
           <label>
             From:
-            <select>
+            <select value={fromCurrency} onChange={(e)=>setFromCurrency(e.target.value)}>
               {
                 ["USD", "EUR", "PKR", "GBP", "AUD"].map((currency)=>{
                   return <option key={currency} value={currency}>{currency}</option>
@@ -31,7 +33,7 @@ const App = () => {
 
           <label>
             To:
-            <select>
+            <select value={toCurrency} onChange={(e)=>setToCurrency(e.target.value)}>
               {
                 ["EUR", "USD", "AUD", "GBP", "PKR"].map((currency)=>{
                   return <option key={currency} value={currency}>{currency}</option>
@@ -41,7 +43,7 @@ const App = () => {
           </label>
         </section>
 
-        <button disabled={isLoading || amount <= 0}>{isLoading? "converting..." : "Convert"}</button>
+        <button disabled={isLoading || amount <= 0} onClick={handleCurrencyConverter} >{isLoading? "converting..." : "Convert"}</button>
       </div>
     </div>
   </section>
