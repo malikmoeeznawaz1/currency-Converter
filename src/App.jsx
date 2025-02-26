@@ -1,4 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react'
+import { currencyConverter } from './api/postApi';
 
 const App = () => {
 
@@ -6,7 +8,17 @@ const App = () => {
   const[fromCurrency, setFromCurrency] = useState("USD");
   const[toCurrency, setToCurrency] = useState("PKR");
 
-  const handleCurrencyConverter = () => {};
+  const {data: convertedAmount, isLoading, error, refetch,} = useQuery({
+    queryKey: ['currency'],
+    queryFn: () => currencyConverter(fromCurrency, toCurrency, amount),
+    enabled: false,
+  });  
+  
+  const handleCurrencyConverter = () => {
+    if (amount > 0) {
+      refetch();
+    }
+  };
 
   return <section>
     <div className="currency-converter">
@@ -44,6 +56,16 @@ const App = () => {
         </section>
 
         <button disabled={isLoading || amount <= 0} onClick={handleCurrencyConverter} >{isLoading? "converting..." : "Convert"}</button>
+
+        <hr />
+        {convertedAmount && (
+          <h2>
+            {amount} {fromCurrency} = {convertedAmount.toFixed(2)} {toCurrency}
+          </h2>
+        )}
+
+        {error && <p>An error occurred: {error.message}</p>}
+
       </div>
     </div>
   </section>
